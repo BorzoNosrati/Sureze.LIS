@@ -35,7 +35,7 @@
     IReadOnlyList<PatientCategoryLookupDto> patientCategoryList = Array.Empty<PatientCategoryLookupDto>();
     IReadOnlyList<NamePrefixLookupDto> namePrefixList = Array.Empty<NamePrefixLookupDto>();
 
-    
+
 
 
     public RegisterPatient()
@@ -75,6 +75,8 @@
         maritalStatusList = (await AppService.GetMaritalStatusLookupAsync()).Items;
         patientCategoryList = (await AppService.GetPatientCategoryLookupAsync()).Items;
         namePrefixList = (await AppService.GetNamePrefixLookupAsync()).Items;
+
+        NewEntity.InActiveStatusId = inActiveStatusList.FirstOrDefault().Id;
 
         defaultProfileImageSrc = navigation.ToAbsoluteUri("/images/avatar2.png").ToString();
 
