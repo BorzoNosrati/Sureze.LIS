@@ -1,0 +1,45 @@
+﻿@typeparam TValue
+@typeparam TItem
+
+@code {
+    [Parameter]
+    public IEnumerable<TItem> Items { get; set; }
+    [Parameter]
+    public TValue SelectedValue { get; set; }
+
+    [Parameter]
+    public Func<TItem, string> GetText { get; set; }
+    [Parameter]
+    public Func<TItem, TValue> GetValue { get; set; }
+
+    /// <summary>
+    /// Default is false
+    /// </summary>
+    [Parameter]
+    public bool Nullable { get; set; }
+
+    [Parameter]
+    public EventCallback<TValue> SelectedValueChanged { get; set; }
+
+    async Task OnSelectedValueChanged(TValue value)
+    {
+        SelectedValue = value;
+        await  SelectedValueChanged.InvokeAsync(SelectedValue);
+    }
+}
+
+<Select TValue="TValue" SelectedValue="@SelectedValue" SelectedValueChanged="@OnSelectedValueChanged">
+    @if (Nullable)
+    {
+    <SelectItem TValue="TValue" >
+        Choose
+    </SelectItem>
+        
+    }
+    @foreach (var item in Items)
+    {
+        <SelectItem TValue="TValue" Value="@GetValue(item)">
+            @GetText( item)
+        </SelectItem>
+    }
+</Select>

@@ -24,6 +24,528 @@ namespace Sureze.LIS.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Sureze.LIS.Commons.AlternateIDType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("AlternateIDTypes");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Citizen", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Citizens");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.EducationLevel", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EducationLevels");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Ethnicity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ethnicities");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Gender", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Genders");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.InActiveStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InActiveStatuses");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Language", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Languages");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.MaritalStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("MaritalStatuses");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Nationality", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Nationalities");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.PatientCategory", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PatientCategories");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.PrimaryProvider", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PrimaryProviders");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Race", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Races");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Religion", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Religions");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Patients.Patient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AlternateIDNumber")
+                        .HasColumnType("text");
+
+                    b.Property<int?>("AlternateIDTypeId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("CitizenId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<int?>("EducationLevelId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("EthnicityId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("InActiveStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("LanguageId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("text");
+
+                    b.Property<string>("MRN")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("MaritalStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("NationalIDNumber")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int?>("NationalityId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PatientCategoryId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("PrimaryProviderId")
+                        .HasColumnType("integer");
+
+                    b.Property<byte[]>("ProfilePicture")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
+                    b.Property<int?>("RaceId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ReligionId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("SexId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Suffix")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AlternateIDTypeId");
+
+                    b.HasIndex("CitizenId");
+
+                    b.HasIndex("EducationLevelId");
+
+                    b.HasIndex("EthnicityId");
+
+                    b.HasIndex("InActiveStatusId");
+
+                    b.HasIndex("LanguageId");
+
+                    b.HasIndex("MaritalStatusId");
+
+                    b.HasIndex("NationalityId");
+
+                    b.HasIndex("PatientCategoryId");
+
+                    b.HasIndex("PrimaryProviderId");
+
+                    b.HasIndex("RaceId");
+
+                    b.HasIndex("ReligionId");
+
+                    b.HasIndex("SexId");
+
+                    b.ToTable("Patients");
+                });
+
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1676,6 +2198,87 @@ namespace Sureze.LIS.Migrations
                     b.ToTable("AbpTenantConnectionStrings", (string)null);
                 });
 
+            modelBuilder.Entity("Sureze.LIS.Patients.Patient", b =>
+                {
+                    b.HasOne("Sureze.LIS.Commons.AlternateIDType", "AlternateIDType")
+                        .WithMany("Patients")
+                        .HasForeignKey("AlternateIDTypeId");
+
+                    b.HasOne("Sureze.LIS.Commons.Citizen", "Citizen")
+                        .WithMany("Patients")
+                        .HasForeignKey("CitizenId");
+
+                    b.HasOne("Sureze.LIS.Commons.EducationLevel", "EducationLevel")
+                        .WithMany("Patients")
+                        .HasForeignKey("EducationLevelId");
+
+                    b.HasOne("Sureze.LIS.Commons.Ethnicity", "Ethnicity")
+                        .WithMany("Patients")
+                        .HasForeignKey("EthnicityId");
+
+                    b.HasOne("Sureze.LIS.Commons.InActiveStatus", "InActiveStatus")
+                        .WithMany("Patients")
+                        .HasForeignKey("InActiveStatusId");
+
+                    b.HasOne("Sureze.LIS.Commons.Language", "Language")
+                        .WithMany("Patients")
+                        .HasForeignKey("LanguageId");
+
+                    b.HasOne("Sureze.LIS.Commons.MaritalStatus", "MaritalStatus")
+                        .WithMany("Patients")
+                        .HasForeignKey("MaritalStatusId");
+
+                    b.HasOne("Sureze.LIS.Commons.Nationality", "Nationality")
+                        .WithMany("Patients")
+                        .HasForeignKey("NationalityId");
+
+                    b.HasOne("Sureze.LIS.Commons.PatientCategory", "PatientCategory")
+                        .WithMany("Patients")
+                        .HasForeignKey("PatientCategoryId");
+
+                    b.HasOne("Sureze.LIS.Commons.PrimaryProvider", "PrimaryProvider")
+                        .WithMany("Patients")
+                        .HasForeignKey("PrimaryProviderId");
+
+                    b.HasOne("Sureze.LIS.Commons.Race", "Race")
+                        .WithMany("Patients")
+                        .HasForeignKey("RaceId");
+
+                    b.HasOne("Sureze.LIS.Commons.Religion", "Religion")
+                        .WithMany("Patients")
+                        .HasForeignKey("ReligionId");
+
+                    b.HasOne("Sureze.LIS.Commons.Gender", "Sex")
+                        .WithMany("Patients")
+                        .HasForeignKey("SexId");
+
+                    b.Navigation("AlternateIDType");
+
+                    b.Navigation("Citizen");
+
+                    b.Navigation("EducationLevel");
+
+                    b.Navigation("Ethnicity");
+
+                    b.Navigation("InActiveStatus");
+
+                    b.Navigation("Language");
+
+                    b.Navigation("MaritalStatus");
+
+                    b.Navigation("Nationality");
+
+                    b.Navigation("PatientCategory");
+
+                    b.Navigation("PrimaryProvider");
+
+                    b.Navigation("Race");
+
+                    b.Navigation("Religion");
+
+                    b.Navigation("Sex");
+                });
+
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLogAction", b =>
                 {
                     b.HasOne("Volo.Abp.AuditLogging.AuditLog", null)
@@ -1816,6 +2419,71 @@ namespace Sureze.LIS.Migrations
                         .HasForeignKey("TenantId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.AlternateIDType", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Citizen", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.EducationLevel", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Ethnicity", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Gender", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.InActiveStatus", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Language", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.MaritalStatus", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Nationality", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.PatientCategory", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.PrimaryProvider", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Race", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.Religion", b =>
+                {
+                    b.Navigation("Patients");
                 });
 
             modelBuilder.Entity("Volo.Abp.AuditLogging.AuditLog", b =>

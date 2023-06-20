@@ -32,6 +32,7 @@
   <ItemGroup>
     <PackageReference Include="Volo.Abp.Autofac" Version="7.2.2" />
     <ProjectReference Include="..\Sureze.LIS.Application.Contracts\Sureze.LIS.Application.Contracts.csproj" />
+
     <ProjectReference Include="..\Sureze.LIS.EntityFrameworkCore\Sureze.LIS.EntityFrameworkCore.csproj" />
   </ItemGroup>
 

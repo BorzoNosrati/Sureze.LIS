@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Sureze.LIS.Commons;
+using Sureze.LIS.Patients;
 using Volo.Abp.AuditLogging.EntityFrameworkCore;
 using Volo.Abp.BackgroundJobs.EntityFrameworkCore;
 using Volo.Abp.Data;
@@ -24,6 +26,28 @@ public class LISDbContext :
     ITenantManagementDbContext
 {
     /* Add DbSet properties for your Aggregate Roots / Entities here. */
+
+    public DbSet<Patient> Patients { get; set; }
+
+    #region Common Entities
+
+
+    public DbSet<PrimaryProvider> PrimaryProviders { get; set; }
+    public DbSet<InActiveStatus> InActiveStatuses { get; set; }
+    public DbSet<AlternateIDType> AlternateIDTypes { get; set; }
+    public DbSet<Gender> Genders { get; set; }
+    public DbSet<Race> Races { get; set; }
+    public DbSet<Language> Languages { get; set; }
+    public DbSet<Ethnicity> Ethnicities { get; set; }
+    public DbSet<EducationLevel> EducationLevels { get; set; }
+    public DbSet<Nationality> Nationalities { get; set; }
+    public DbSet<Citizen> Citizens { get; set; }
+    public DbSet<Religion> Religions { get; set; }
+    public DbSet<MaritalStatus> MaritalStatuses { get; set; }
+    public DbSet<PatientCategory> PatientCategories { get; set; }
+    #endregion
+
+
 
     #region Entities from the modules
 

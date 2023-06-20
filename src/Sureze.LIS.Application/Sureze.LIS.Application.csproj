@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Sureze.LIS.Domain\Sureze.LIS.Domain.csproj" />
     <ProjectReference Include="..\Sureze.LIS.Application.Contracts\Sureze.LIS.Application.Contracts.csproj" />
+    <ProjectReference Include="..\Sureze.LIS.Domain\Sureze.LIS.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>

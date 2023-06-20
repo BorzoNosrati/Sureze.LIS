@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Include="..\..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Sureze.LIS.EntityFrameworkCore\Sureze.LIS.EntityFrameworkCore.csproj" />
     <ProjectReference Include="..\Sureze.LIS.TestBase\Sureze.LIS.TestBase.csproj" />
     <PackageReference Include="Volo.Abp.EntityFrameworkCore.Sqlite" Version="7.2.2" />

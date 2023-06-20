@@ -41,6 +41,7 @@ using Volo.Abp.UI;
 using Volo.Abp.UI.Navigation;
 using Volo.Abp.UI.Navigation.Urls;
 using Volo.Abp.VirtualFileSystem;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Sureze.LIS.Blazor;
 
@@ -89,7 +90,7 @@ public class LISBlazorModule : AbpModule
     {
         var hostingEnvironment = context.Services.GetHostingEnvironment();
         var configuration = context.Services.GetConfiguration();
-
+      
         ConfigureAuthentication(context);
         ConfigureUrls(configuration);
         ConfigureBundles();
@@ -100,6 +101,12 @@ public class LISBlazorModule : AbpModule
         ConfigureBlazorise(context);
         ConfigureRouter(context);
         ConfigureMenu(context);
+
+        Configure<HubOptions>(options =>
+        {
+            options.DisableImplicitFromServicesParameters = true;
+        });
+
     }
 
     private void ConfigureAuthentication(ServiceConfigurationContext context)

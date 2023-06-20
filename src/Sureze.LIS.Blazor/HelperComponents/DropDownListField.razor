@@ -1,0 +1,20 @@
+﻿@typeparam TValue
+@typeparam TItem
+
+@inherits DropDownList<TValue,TItem>
+@code {
+
+    [Parameter]
+    public string Title { get; set; }
+
+
+}
+
+<Field>
+    <FieldLabel>@Title</FieldLabel>
+
+    <DropDownList TItem="TItem" TValue="TValue" SelectedValueChanged="@SelectedValueChanged"
+                  Items="Items" SelectedValue="@SelectedValue" Nullable="Nullable"
+                  GetValue="GetValue" GetText="GetText" />
+
+</Field>

@@ -1,0 +1,339 @@
+﻿@page "/RegisterPatient"
+@using Microsoft.Extensions.Localization;
+@using Sureze.LIS.Application.Contracts.Dtos.Commons;
+@using Sureze.LIS.Application.Contracts.Services;
+@using Sureze.LIS.Blazor.HelperComponents
+@using Sureze.LIS.Dtos.Patients;
+@using Sureze.LIS.Localization;
+@using System.IO;
+@using Volo.Abp.Application.Dtos;
+@using Volo.Abp.AspNetCore.Components.Web;
+
+
+@inject NavigationManager navigation
+@*@inject IStringLocalizer<LISResource> L*@
+@inject AbpBlazorMessageLocalizerHelper<LISResource> LH
+@inherits AbpCrudPageBase<IPatientAppService,
+        PatientDto, int, PagedAndSortedResultRequestDto,
+        CreatePatientDto, UpdatePatientDto>
+
+@code {
+
+    IReadOnlyList<PrimaryProviderLookupDto> primaryProviderList = Array.Empty<PrimaryProviderLookupDto>();
+    IReadOnlyList<InActiveStatusLookupDto> inActiveStatusList = Array.Empty<InActiveStatusLookupDto>();
+    IReadOnlyList<AlternateIDTypeLookupDto> alternateIDTypeList = Array.Empty<AlternateIDTypeLookupDto>();
+    IReadOnlyList<GenderLookupDto> genderList = Array.Empty<GenderLookupDto>();
+    IReadOnlyList<RaceLookupDto> raceList = Array.Empty<RaceLookupDto>();
+    IReadOnlyList<LanguageLookupDto> languageList = Array.Empty<LanguageLookupDto>();
+    IReadOnlyList<EthnicityLookupDto> ethnicityList = Array.Empty<EthnicityLookupDto>();
+    IReadOnlyList<EducationLevelLookupDto> educationLevelList = Array.Empty<EducationLevelLookupDto>();
+    IReadOnlyList<NationalityLookupDto> nationalityList = Array.Empty<NationalityLookupDto>();
+    IReadOnlyList<CitizenLookupDto> citizenList = Array.Empty<CitizenLookupDto>();
+    IReadOnlyList<ReligionLookupDto> religionList = Array.Empty<ReligionLookupDto>();
+    IReadOnlyList<MaritalStatusLookupDto> maritalStatusList = Array.Empty<MaritalStatusLookupDto>();
+    IReadOnlyList<PatientCategoryLookupDto> patientCategoryList = Array.Empty<PatientCategoryLookupDto>();
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        primaryProviderList = (await AppService.GetPrimaryProviderLookupAsync()).Items;
+        inActiveStatusList = (await AppService.GetInActiveStatusLookupAsync()).Items;
+        alternateIDTypeList = (await AppService.GetAlternateIDTypeLookupAsync()).Items;
+        genderList = (await AppService.GetGenderLookupAsync()).Items;
+        raceList = (await AppService.GetRaceLookupAsync()).Items;
+        languageList = (await AppService.GetLanguageLookupAsync()).Items;
+        ethnicityList = (await AppService.GetEthnicityLookupAsync()).Items;
+        educationLevelList = (await AppService.GetEducationLevelLookupAsync()).Items;
+        nationalityList = (await AppService.GetNationalityLookupAsync()).Items;
+        citizenList = (await AppService.GetCitizenLookupAsync()).Items;
+        religionList = (await AppService.GetReligionLookupAsync()).Items;
+        maritalStatusList = (await AppService.GetMaritalStatusLookupAsync()).Items;
+        patientCategoryList = (await AppService.GetPatientCategoryLookupAsync()).Items;
+
+        defaultProfileImageSrc = navigation.ToAbsoluteUri("/images/logo/leptonx/logo-dark.png").ToString();
+    }
+    protected async override Task CreateEntityAsync()
+    {
+        await base.CreateEntityAsync();
+    }
+    protected override Task OnCreatingEntityAsync()
+    {
+        return base.OnCreatingEntityAsync();
+    }
+
+    protected override Task OnCreatedEntityAsync()
+    {
+        navigation.NavigateTo("/patients");
+        return base.OnCreatedEntityAsync();
+    }
+    async Task OnProfilePictureChanged(FileChangedEventArgs e)
+    {
+        if (e.Files.Length > 0)
+        {
+            using (MemoryStream result = new MemoryStream())
+            {
+                var file = e.Files[0];
+                await file.OpenReadStream(1 * 1024 * 1024).CopyToAsync(result);
+
+                NewEntity.ProfilePicture = result.GetBuffer();
+
+                profileImageSrc = $"data:image/png;base64,{Convert.ToBase64String(NewEntity.ProfilePicture)}";
+                defaultProfileImageSrc = profileImageSrc;
+
+                file.Status = FileEntryStatus.Uploaded;
+            }
+
+        }
+    }
+
+    private FilePicker filePickerCustom;
+    private FileEdit fileEdit;
+    private string profileImageSrc;
+    private string defaultProfileImageSrc;
+    DatePicker<DateOnly?> dobDatePicker;
+    string mrn;
+}
+
+<h3>RegisterPatient</h3>
+
+<img src="~/images/logo/leptonx/logo-dark.png" />
+<Row>
+    <Column ColumnSize="ColumnSize.Is3.OnTablet.Is2.OnDesktop">
+        <Card>
+            <CardBody>
+
+                <CardImage Source="@defaultProfileImageSrc" Border="Border.RoundedCircle" />
+                <CardTitle TextAlignment="TextAlignment.Center">@NewEntity.FirstName @NewEntity.LastName</CardTitle>
+                <CardText TextAlignment="TextAlignment.Center">@NewEntity.MRN</CardText>
+            </CardBody>
+        </Card>
+    </Column>
+    <Column ColumnSize="ColumnSize.Is9.OnTablet.Is10.OnDesktop">
+        <Card>
+            <CardBody>
+                <Form>
+
+                    <Div>
+                        <Validations @ref="@CreateValidationsRef" Model="@NewEntity" ValidateOnLoad="false">
+                            <Row>
+                                <Column ColumnSize="ColumnSize.Is6">
+
+                                    <DropDownListField Title="@L["PrimaryProvider"]" TItem="PrimaryProviderLookupDto" TValue="int?"
+                                                       Items="primaryProviderList" @bind-SelectedValue="@NewEntity.PrimaryProviderId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Validation MessageLocalizer="@LH.Localize">
+                                        <Field>
+                                            <FieldLabel>@L["MRN"]</FieldLabel>
+                                            <TextEdit @bind-Text="@NewEntity.MRN">
+                                                <Feedback>
+                                                    <ValidationError />
+                                                </Feedback>
+                                            </TextEdit>
+                                        </Field>
+                                    </Validation>
+                                    <p>@NewEntity.MRN</p>
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is12">
+                                    <DropDownListField Title="@L["InActiveStatus"]" TItem="InActiveStatusLookupDto" TValue="int?"
+                                                       Items="inActiveStatusList" @bind-SelectedValue="@NewEntity.InActiveStatusId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Field>
+                                        <FieldLabel>@L["Title"]</FieldLabel>
+                                        <TextEdit @bind-Text="@NewEntity.Title">
+
+                                        </TextEdit>
+                                    </Field>
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Field>
+                                        <FieldLabel>@L["Suffix"]</FieldLabel>
+                                        <TextEdit @bind-Text="@NewEntity.Suffix">
+
+                                        </TextEdit>
+                                    </Field>
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Validation MessageLocalizer="@LH.Localize">
+                                        <Field>
+                                            <FieldLabel>@L["FirstName"]</FieldLabel>
+                                            <TextEdit @bind-Text="@NewEntity.FirstName">
+                                                <Feedback>
+                                                    <ValidationError />
+                                                </Feedback>
+                                            </TextEdit>
+                                        </Field>
+                                    </Validation>
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Field>
+                                        <FieldLabel>@L["LastName"]</FieldLabel>
+                                        <TextEdit @bind-Text="@NewEntity.LastName">
+
+                                        </TextEdit>
+                                    </Field>
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is12">
+
+                                    <Validation MessageLocalizer="@LH.Localize">
+                                        <Field>
+                                            <FieldLabel>@L["NationalIDNumber"]</FieldLabel>
+                                            <TextEdit @bind-Text="@NewEntity.NationalIDNumber">
+                                                <Feedback>
+                                                    <ValidationError />
+                                                </Feedback>
+                                            </TextEdit>
+                                        </Field>
+                                    </Validation>
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+
+                                    <DropDownListField Title="@L["AlternateIDType"]" TItem="AlternateIDTypeLookupDto" TValue="int?"
+                                                       Items="alternateIDTypeList" @bind-SelectedValue="@NewEntity.AlternateIDTypeId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+                                <Column ColumnSize="ColumnSize.Is6">
+
+                                    <Field>
+                                        <FieldLabel>@L["AlternateIDNumber"]</FieldLabel>
+                                        <TextEdit @bind-Text="@NewEntity.AlternateIDNumber">
+
+                                        </TextEdit>
+                                    </Field>
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Field>
+                                        <FieldLabel>@L["Date of Birth"]</FieldLabel>
+                                        <Addons>
+                                            <Addon AddonType="AddonType.Body">
+
+                                                <DatePicker TValue="DateOnly?" @ref="@dobDatePicker" @bind-Date="@NewEntity.DateOfBirth" />
+                                            </Addon>
+                                            <Addon AddonType="AddonType.End">
+                                                <Button Color="Color.Light" Clicked="@(()=>dobDatePicker.ToggleAsync())">
+                                                    <Icon Name="IconName.CalendarDay" />
+                                                </Button>
+                                            </Addon>
+                                        </Addons>
+                                    </Field>
+
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["Gender"]" TItem="GenderLookupDto" TValue="int?"
+                                                       Items="genderList" @bind-SelectedValue="@NewEntity.SexId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["Race"]" TItem="RaceLookupDto" TValue="int?"
+                                                       Items="raceList" @bind-SelectedValue="@NewEntity.RaceId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["Language"]" TItem="LanguageLookupDto" TValue="int?"
+                                                       Items="languageList" @bind-SelectedValue="@NewEntity.LanguageId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["Ethnicity"]" TItem="EthnicityLookupDto" TValue="int?"
+                                                       Items="ethnicityList" @bind-SelectedValue="@NewEntity.EthnicityId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["EducationLevel"]" TItem="EducationLevelLookupDto" TValue="int?"
+                                                       Items="educationLevelList" @bind-SelectedValue="@NewEntity.EducationLevelId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["Nationality"]" TItem="NationalityLookupDto" TValue="int?"
+                                                       Items="nationalityList" @bind-SelectedValue="@NewEntity.NationalityId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["Citizen"]" TItem="CitizenLookupDto" TValue="int?"
+                                                       Items="citizenList" @bind-SelectedValue="@NewEntity.CitizenId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["Religion"]" TItem="ReligionLookupDto" TValue="int?"
+                                                       Items="religionList" @bind-SelectedValue="@NewEntity.ReligionId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["MaritalStatus"]" TItem="MaritalStatusLookupDto" TValue="int?"
+                                                       Items="maritalStatusList" @bind-SelectedValue="@NewEntity.MaritalStatusId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <DropDownListField Title="@L["PatientCategory"]" TItem="PatientCategoryLookupDto" TValue="int?"
+                                                       Items="patientCategoryList" @bind-SelectedValue="@NewEntity.PatientCategoryId" Nullable="true"
+                                                       GetValue="g=>g.Id"
+                                                       GetText="g=>g.Title" />
+                                </Column>
+
+                                <Column ColumnSize="ColumnSize.Is6">
+                                    <Field>
+                                        <FieldLabel>@L["ProfilePicture"]</FieldLabel>
+                                        <FileEdit Changed="@OnProfilePictureChanged" />
+
+                                        @if (profileImageSrc is not null)
+                                        {
+                                            <img src="@profileImageSrc" style="height:50px" class="rounded m-2" />
+                                        }
+                                        
+                                    </Field>
+                                </Column>
+                            </Row>
+
+                        </Validations>
+                    </Div>
+                    <Div>
+                        <Button Color="Color.Secondary"
+                                Clicked="CloseCreateModalAsync">
+                            @L["Cancel"]
+                        </Button>
+                        <Button Color="Color.Primary"
+                                Type="@ButtonType.Submit"
+                                PreventDefaultOnSubmit="true"
+                                Clicked="CreateEntityAsync">
+                            @L["Save"]
+                        </Button>
+                    </Div>
+                </Form>
+            </CardBody>
+        </Card>
+    </Column>
+</Row>
+
