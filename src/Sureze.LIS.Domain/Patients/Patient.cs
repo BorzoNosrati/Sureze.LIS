@@ -16,14 +16,14 @@ public class Patient : AggregateRoot<int>
     [Required]
     public string NationalIDNumber { get; set; }
 
-    public int? PrimaryProviderId { get; set; }
-    public int? InActiveStatusId { get; set; }
-    public string? Title { get; set; }
+    public int? NamePrefixId { get; set; }
     public string? Suffix { get; set; }
 
-    public int? AlternateIDTypeId { get; set; }
     public string? AlternateIDNumber { get; set; }
     public DateOnly? DateOfBirth { get; set; }
+    public int? PrimaryProviderId { get; set; }
+    public int InActiveStatusId { get; set; }
+    public int? AlternateIDTypeId { get; set; }
     public int? SexId { get; set; }
     public int? RaceId { get; set; }
     public int? LanguageId { get; set; }
@@ -41,7 +41,7 @@ public class Patient : AggregateRoot<int>
 
 
     public PrimaryProvider? PrimaryProvider { get; set; }
-    public InActiveStatus? InActiveStatus { get; set; }
+    public InActiveStatus InActiveStatus { get; set; }
     public AlternateIDType? AlternateIDType { get; set; }
     public Gender? Sex { get; set; }
     public Race? Race { get; set; }
@@ -53,4 +53,6 @@ public class Patient : AggregateRoot<int>
     public Religion? Religion { get; set; }
     public MaritalStatus? MaritalStatus { get; set; }
     public PatientCategory? PatientCategory { get; set; }
+    public NamePrefix? NamePrefix { get; set; }
+    
 }

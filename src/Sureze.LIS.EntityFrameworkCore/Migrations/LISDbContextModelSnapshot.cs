@@ -272,6 +272,37 @@ namespace Sureze.LIS.Migrations
                     b.ToTable("MaritalStatuses");
                 });
 
+            modelBuilder.Entity("Sureze.LIS.Commons.NamePrefix", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)")
+                        .HasColumnName("ConcurrencyStamp");
+
+                    b.Property<string>("ExtraProperties")
+                        .HasColumnType("text")
+                        .HasColumnName("ExtraProperties");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("NamePrefixes");
+                });
+
             modelBuilder.Entity("Sureze.LIS.Commons.Nationality", b =>
                 {
                     b.Property<int>("Id")
@@ -467,7 +498,7 @@ namespace Sureze.LIS.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("InActiveStatusId")
+                    b.Property<int>("InActiveStatusId")
                         .HasColumnType("integer");
 
                     b.Property<int?>("LanguageId")
@@ -481,6 +512,9 @@ namespace Sureze.LIS.Migrations
                         .HasColumnType("text");
 
                     b.Property<int?>("MaritalStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("NamePrefixId")
                         .HasColumnType("integer");
 
                     b.Property<string>("NationalIDNumber")
@@ -512,9 +546,6 @@ namespace Sureze.LIS.Migrations
                     b.Property<string>("Suffix")
                         .HasColumnType("text");
 
-                    b.Property<string>("Title")
-                        .HasColumnType("text");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AlternateIDTypeId");
@@ -530,6 +561,8 @@ namespace Sureze.LIS.Migrations
                     b.HasIndex("LanguageId");
 
                     b.HasIndex("MaritalStatusId");
+
+                    b.HasIndex("NamePrefixId");
 
                     b.HasIndex("NationalityId");
 
@@ -2218,7 +2251,9 @@ namespace Sureze.LIS.Migrations
 
                     b.HasOne("Sureze.LIS.Commons.InActiveStatus", "InActiveStatus")
                         .WithMany("Patients")
-                        .HasForeignKey("InActiveStatusId");
+                        .HasForeignKey("InActiveStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Sureze.LIS.Commons.Language", "Language")
                         .WithMany("Patients")
@@ -2227,6 +2262,10 @@ namespace Sureze.LIS.Migrations
                     b.HasOne("Sureze.LIS.Commons.MaritalStatus", "MaritalStatus")
                         .WithMany("Patients")
                         .HasForeignKey("MaritalStatusId");
+
+                    b.HasOne("Sureze.LIS.Commons.NamePrefix", "NamePrefix")
+                        .WithMany("Patients")
+                        .HasForeignKey("NamePrefixId");
 
                     b.HasOne("Sureze.LIS.Commons.Nationality", "Nationality")
                         .WithMany("Patients")
@@ -2265,6 +2304,8 @@ namespace Sureze.LIS.Migrations
                     b.Navigation("Language");
 
                     b.Navigation("MaritalStatus");
+
+                    b.Navigation("NamePrefix");
 
                     b.Navigation("Nationality");
 
@@ -2457,6 +2498,11 @@ namespace Sureze.LIS.Migrations
                 });
 
             modelBuilder.Entity("Sureze.LIS.Commons.MaritalStatus", b =>
+                {
+                    b.Navigation("Patients");
+                });
+
+            modelBuilder.Entity("Sureze.LIS.Commons.NamePrefix", b =>
                 {
                     b.Navigation("Patients");
                 });

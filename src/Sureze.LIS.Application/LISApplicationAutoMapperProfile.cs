@@ -34,6 +34,7 @@ public class LISApplicationAutoMapperProfile : Profile
         CreateMap<Citizen        ,CitizenLookupDto        >();
         CreateMap<Religion       ,ReligionLookupDto       >();
         CreateMap<MaritalStatus  ,MaritalStatusLookupDto  >();
-        CreateMap<PatientCategory, PatientCategoryLookupDto>();
+        CreateMap<PatientCategory,PatientCategoryLookupDto>();
+        CreateMap<NamePrefix     ,NamePrefixLookupDto>();
     }
 }

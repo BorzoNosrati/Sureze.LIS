@@ -28,6 +28,7 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, PagedA
     private readonly IRepository<Race, int> _raceRep;
     private readonly IRepository<Religion, int> _religionRep;
     private readonly IRepository<Gender, int> _genderRep;
+    private readonly IRepository<NamePrefix, int> _namePrefixRep;
 
     public PatientAppService(
         IRepository<Patient, int> repository,
@@ -44,7 +45,8 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, PagedA
         IRepository<PrimaryProvider, int> primaryProviderRep,
         IRepository<Race, int> raceRep,
         IRepository<Religion, int> religionRep,
-        IRepository<Gender, int> genderRep
+        IRepository<Gender, int> genderRep,
+        IRepository<NamePrefix, int> namePrefixRep
         ) : base(repository)
     {
 
@@ -63,6 +65,7 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, PagedA
         _raceRep = raceRep;
         _religionRep = religionRep;
         _genderRep = genderRep;
+        _namePrefixRep = namePrefixRep;
     }
 
     public async Task<ListResultDto<AlternateIDTypeLookupDto>> GetAlternateIDTypeLookupAsync()
@@ -129,6 +132,10 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, PagedA
     public async Task<ListResultDto<GenderLookupDto>> GetGenderLookupAsync()
     {
         return await GetAllLookupAsync<Gender, GenderLookupDto, int>(_genderRep);
+    }
+    public async Task<ListResultDto<NamePrefixLookupDto>> GetNamePrefixLookupAsync()
+    {
+        return await GetAllLookupAsync<NamePrefix, NamePrefixLookupDto, int>(_namePrefixRep);
     }
 
 

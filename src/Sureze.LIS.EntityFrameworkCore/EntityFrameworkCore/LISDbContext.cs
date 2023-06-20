@@ -45,6 +45,7 @@ public class LISDbContext :
     public DbSet<Religion> Religions { get; set; }
     public DbSet<MaritalStatus> MaritalStatuses { get; set; }
     public DbSet<PatientCategory> PatientCategories { get; set; }
+    public DbSet<NamePrefix> NamePrefixes { get; set; }
     #endregion
 
 

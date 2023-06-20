@@ -141,6 +141,22 @@ namespace Sureze.LIS.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "NamePrefixes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ExtraProperties = table.Column<string>(type: "text", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "character varying(40)", maxLength: 40, nullable: true),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_NamePrefixes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Nationalities",
                 columns: table => new
                 {
@@ -228,22 +244,22 @@ namespace Sureze.LIS.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     MRN = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: true),
                     NationalIDNumber = table.Column<string>(type: "text", nullable: false),
+                    NamePrefixId = table.Column<int>(type: "integer", nullable: true),
+                    Suffix = table.Column<string>(type: "text", nullable: true),
+                    AlternateIDNumber = table.Column<string>(type: "text", nullable: true),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: true),
                     PrimaryProviderId = table.Column<int>(type: "integer", nullable: true),
                     InActiveStatusId = table.Column<int>(type: "integer", nullable: false),
-                    Title = table.Column<string>(type: "text", nullable: false),
-                    Suffix = table.Column<string>(type: "text", nullable: false),
                     AlternateIDTypeId = table.Column<int>(type: "integer", nullable: true),
-                    AlternateIDNumber = table.Column<string>(type: "text", nullable: false),
-                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: true),
                     SexId = table.Column<int>(type: "integer", nullable: true),
                     RaceId = table.Column<int>(type: "integer", nullable: true),
                     LanguageId = table.Column<int>(type: "integer", nullable: true),
                     EthnicityId = table.Column<int>(type: "integer", nullable: true),
                     EducationLevelId = table.Column<int>(type: "integer", nullable: true),
                     NationalityId = table.Column<int>(type: "integer", nullable: true),
-                    CitizenId = table.Column<int>(type: "integer", nullable: false),
+                    CitizenId = table.Column<int>(type: "integer", nullable: true),
                     ReligionId = table.Column<int>(type: "integer", nullable: true),
                     MaritalStatusId = table.Column<int>(type: "integer", nullable: true),
                     PatientCategoryId = table.Column<int>(type: "integer", nullable: true),
@@ -263,8 +279,7 @@ namespace Sureze.LIS.Migrations
                         name: "FK_Patients_Citizens_CitizenId",
                         column: x => x.CitizenId,
                         principalTable: "Citizens",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Patients_EducationLevels_EducationLevelId",
                         column: x => x.EducationLevelId,
@@ -295,6 +310,11 @@ namespace Sureze.LIS.Migrations
                         name: "FK_Patients_MaritalStatuses_MaritalStatusId",
                         column: x => x.MaritalStatusId,
                         principalTable: "MaritalStatuses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Patients_NamePrefixes_NamePrefixId",
+                        column: x => x.NamePrefixId,
+                        principalTable: "NamePrefixes",
                         principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Patients_Nationalities_NationalityId",
@@ -359,6 +379,11 @@ namespace Sureze.LIS.Migrations
                 column: "MaritalStatusId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Patients_NamePrefixId",
+                table: "Patients",
+                column: "NamePrefixId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Patients_NationalityId",
                 table: "Patients",
                 column: "NationalityId");
@@ -418,6 +443,9 @@ namespace Sureze.LIS.Migrations
 
             migrationBuilder.DropTable(
                 name: "MaritalStatuses");
+
+            migrationBuilder.DropTable(
+                name: "NamePrefixes");
 
             migrationBuilder.DropTable(
                 name: "Nationalities");

@@ -5,14 +5,14 @@ using Volo.Abp.Application.Services;
 
 namespace Sureze.LIS.Application.Contracts.Services;
 
-public interface IPatientAppService:ICrudAppService<
+public interface IPatientAppService : ICrudAppService<
     PatientDto,
     int,
     PagedAndSortedResultRequestDto,
     CreatePatientDto,
     UpdatePatientDto>
 {
-    
+
     Task<ListResultDto<PrimaryProviderLookupDto>> GetPrimaryProviderLookupAsync();
     Task<ListResultDto<InActiveStatusLookupDto>> GetInActiveStatusLookupAsync();
     Task<ListResultDto<AlternateIDTypeLookupDto>> GetAlternateIDTypeLookupAsync();
@@ -25,5 +25,6 @@ public interface IPatientAppService:ICrudAppService<
     Task<ListResultDto<CitizenLookupDto>> GetCitizenLookupAsync();
     Task<ListResultDto<ReligionLookupDto>> GetReligionLookupAsync();
     Task<ListResultDto<MaritalStatusLookupDto>> GetMaritalStatusLookupAsync();
-Task < ListResultDto < PatientCategoryLookupDto>> GetPatientCategoryLookupAsync();
+    Task<ListResultDto<PatientCategoryLookupDto>> GetPatientCategoryLookupAsync();
+    Task<ListResultDto<NamePrefixLookupDto>> GetNamePrefixLookupAsync();
 }

@@ -14,8 +14,8 @@ public class PatientDto : AuditedEntityDto<int>
     public string NationalIDNumber { get; set; }
 
     public int? PrimaryProviderId { get; set; }
-    public int? InActiveStatusId { get; set; }
-    public string Title { get; set; }
+    public int InActiveStatusId { get; set; }
+    public int? NamePrefixId { get; set; }
     public string Suffix { get; set; }
 
     public int? AlternateIDTypeId { get; set; }

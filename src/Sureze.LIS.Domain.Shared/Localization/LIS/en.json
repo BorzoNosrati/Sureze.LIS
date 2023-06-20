@@ -3,6 +3,61 @@
   "texts": {
     "Menu:Home": "Home",
     "Welcome": "Welcome",
-    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io."
+    "LongWelcomeMessage": "Welcome to the application. This is a startup project based on the ABP framework. For more information, visit abp.io.",
+
+
+    "Actions": "Actions",
+    "Close": "Close",
+    "Delete": "Delete",
+    "Edit": "Edit",
+
+    "AreYouSureToDelete": "Are you sure you want to delete this item?",
+    "AreYouSure": "Are you sure?",
+
+    "Menu:LIS": "LIS",
+    "Menu:Patients": "Patients",
+    "Menu:Patients:List":"Patient List",
+    "Menu:Patients:Register":"Register Patient",
+    
+    "NewPatient": "New Patient",
+    "Name": "Name",
+    "CreationTime": "Creation time",
+
+
+
+    "Permission:LIS": "LIS",
+    "Permission:Patients": "Patients Management",
+    "Permission:Patients.Create": "Creating new Patients",
+    "Permission:Patients.Edit": "Editing the Patients",
+    "Permission:Patients.Delete": "Deleting the Patients",
+
+
+    "MRN": "MRN",
+    "FirstName": "First Name",
+    "LastName": "Last Name",
+    "NationalIDNumber": "National ID. Number",
+    "NamePrefix": "Title",
+    "Suffix": "Suffix",
+    "AlternateIDNumber": "Alternate ID. Number",
+    "DateOfBirth": "Date Of Birth",
+
+
+    "PrimaryProvider": "Primary Provider",
+    "InActiveStatus": "Inactive Status",
+    "AlternateIDType": "Alternate ID. Type",
+    "Gender": "Gender",
+    "Race": "Race",
+    "Language": "Language",
+    "Ethnicity": "Ethnicity",
+    "EducationLevel": "Education Level",
+    "Nationality": "Nationality",
+    "Citizen": "Citizen",
+    "Religion": "Religion",
+    "MaritalStatus": "Marital Status",
+    "PatientCategory": "Patient Category",
+    "ProfilePicture": "Profile Picture"
+
+
+
   }
 }

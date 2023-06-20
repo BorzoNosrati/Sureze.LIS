@@ -22,15 +22,14 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Localization\LIS\*.json" />
+    <Compile Remove="Patients\**" />
     <Content Remove="Localization\LIS\*.json" />
+    <EmbeddedResource Remove="Patients\**" />
+    <None Remove="Patients\**" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.FileProviders.Embedded" Version="7.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Patients\" />
   </ItemGroup>
 
 </Project>

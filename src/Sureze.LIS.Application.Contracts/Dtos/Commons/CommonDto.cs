@@ -25,3 +25,4 @@ public class CitizenLookupDto           : CommonLookupDto { }
 public class ReligionLookupDto          : CommonLookupDto { }
 public class MaritalStatusLookupDto     : CommonLookupDto { }
 public class PatientCategoryLookupDto   : CommonLookupDto { }
+public class NamePrefixLookupDto : CommonLookupDto { }
