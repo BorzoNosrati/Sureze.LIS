@@ -60,7 +60,6 @@
     DatePicker<DateOnly?> dobDatePicker;
 }
 
-<h3>Patients</h3>
 
 <Card>
     <CardHeader>
@@ -113,7 +112,7 @@ return dataGrid.Reload();
                   FilterMethod="DataGridFilterMethod.Contains"
                   FilteredDataChanged="OnFilteredDataChanged">
             <DataGridColumns>
-
+               
                 <DataGridColumn TItem="PatientDto"
                                 Field="@nameof(PatientDto.FirstName)"
                                 Caption="@L["Person"]"
