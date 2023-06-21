@@ -18,6 +18,7 @@ public class LISApplicationAutoMapperProfile : Profile
         CreateMap<CreatePatientDto, Patient>();
         CreateMap<UpdatePatientDto, Patient>();
         CreateMap<PatientDto, UpdatePatientDto>();
+        CreateMap<PatientRequestDto, PatientFilter>();
 
 
         /// common lookups

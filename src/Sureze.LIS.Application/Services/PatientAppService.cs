@@ -19,7 +19,7 @@ namespace Sureze.LIS.Services;
 
 public class PatientAppService : CrudAppService<Patient, PatientDto, int, PatientRequestDto, CreatePatientDto, UpdatePatientDto>, IPatientAppService
 {
-    private readonly IDataFilter<IPatientFilter> _dataFilter;
+    private readonly IPatientRepository _repository;
     private readonly IRepository<AlternateIDType, int> _alternateIDTypeRep;
     private readonly IRepository<Citizen, int> _citizenRep;
     private readonly IRepository<EducationLevel, int> _educationLevelRep;
@@ -36,7 +36,7 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, Patien
     private readonly IRepository<NamePrefix, int> _namePrefixRep;
 
     public PatientAppService(
-        IRepository<Patient, int> repository,
+        IPatientRepository repository,
 
         IRepository<AlternateIDType, int> alternateIDTypeRep,
         IRepository<Citizen, int> citizenRep,
@@ -51,14 +51,12 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, Patien
         IRepository<Race, int> raceRep,
         IRepository<Religion, int> religionRep,
         IRepository<Gender, int> genderRep,
-        IRepository<NamePrefix, int> namePrefixRep,
+        IRepository<NamePrefix, int> namePrefixRep
 
 
-        IDataFilter<IPatientFilter> dataFilter
         ) : base(repository)
     {
-        _dataFilter = dataFilter;
-
+        _repository = repository;
         _alternateIDTypeRep = alternateIDTypeRep;
         _citizenRep = citizenRep;
         _educationLevelRep = educationLevelRep;
@@ -93,38 +91,27 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, Patien
     }
     protected async override Task<IQueryable<Patient>> CreateFilteredQueryAsync(PatientRequestDto input)
     {
-        var q = await base.CreateFilteredQueryAsync(input);
-        return q
-           .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => 
-           x.NationalIDNumber.Contains(input.Filter)||
-           x.MRN.Contains(input.Filter)||
-           (x.FirstName+" "+x.LastName).Contains(input.Filter))
+        return await _repository.CreateFilteredQueryAsync(ObjectMapper.Map<PatientRequestDto, PatientFilter>(input));
 
-           .WhereIf(!input.NationalIDNumber.IsNullOrWhiteSpace(), x => x.NationalIDNumber.Contains(input.NationalIDNumber))
-           .WhereIf(!input.MRN.IsNullOrWhiteSpace(), x => x.MRN.Contains(input.MRN))
-           .WhereIf(input.InActiveStatusId.HasValue, x => x.InActiveStatusId==input.InActiveStatusId)
-           .WhereIf(input.DateOfBirth.HasValue, x => x.DateOfBirth == input.DateOfBirth)
-           .WhereIf(!input.Fullname.IsNullOrWhiteSpace(), x => (x.FirstName + " " + x.LastName).Contains(input.Fullname))
-           ;
+
     }
     public async override Task<PagedResultDto<PatientDto>> GetListAsync(PatientRequestDto input)
     {
-        using (_dataFilter.Enable())
+
+        // because I sure that the " _inActiveStatusRep.GetListAsync()" returns less than 10 items
+        var statuses = await _inActiveStatusRep.GetListAsync();
+
+        var patients = await base.GetListAsync(input);
+
+
+        var newPatients = patients.Items.Join(statuses, p => p.InActiveStatusId, s => s.Id, (p, s) =>
         {
-            // because I sure that the " _inActiveStatusRep.GetListAsync()" returns less than 10 items
-            var statuses = await _inActiveStatusRep.GetListAsync();
+            p.InActiveStatus = s.Title;
+            return p;
+        });
+        patients.Items = newPatients.ToList();
+        return patients;
 
-            var patients = await base.GetListAsync(input);
-
-
-            var newPatients = patients.Items.Join(statuses, p => p.InActiveStatusId, s => s.Id, (p, s) =>
-            {
-                p.InActiveStatus = s.Title;
-                return p;
-            });
-            patients.Items = newPatients.ToList();
-            return patients;
-        }
 
 
 
