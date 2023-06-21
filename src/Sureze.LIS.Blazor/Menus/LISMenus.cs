@@ -1,4 +1,7 @@
-﻿namespace Sureze.LIS.Blazor.Menus;
+﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+using System.Collections;
+
+namespace Sureze.LIS.Blazor.Menus;
 
 public class LISMenus
 {

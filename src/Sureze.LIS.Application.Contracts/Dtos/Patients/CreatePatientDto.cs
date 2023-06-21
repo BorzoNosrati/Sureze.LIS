@@ -36,7 +36,7 @@ public class CreatePatientDto: AuditedEntityDto<int>
     public int? ReligionId { get; set; }
     public int? MaritalStatusId { get; set; }
     public int? PatientCategoryId { get; set; }
-    public byte[] ProfilePicture { get; set; }
+    public byte[]? ProfilePicture { get; set; }
 
 
 
@@ -69,12 +69,13 @@ public class UpdatePatientDto: AuditedEntityDto<int>
     public int? EthnicityId { get; set; }
     public int? EducationLevelId { get; set; }
     public int? NationalityId { get; set; }
-    public int CitizenId { get; set; }
+    public int? CitizenId { get; set; }
     public int? ReligionId { get; set; }
     public int? MaritalStatusId { get; set; }
     public int? PatientCategoryId { get; set; }
 
 
+    public byte[]? ProfilePicture { get; set; }
 
 
 }

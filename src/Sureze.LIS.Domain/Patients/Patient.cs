@@ -5,7 +5,7 @@ using Volo.Abp.Domain.Entities;
 
 namespace Sureze.LIS.Patients;
 
-public class Patient : AggregateRoot<int>
+public class Patient : AggregateRoot<int>,IPatientFilter
 {
 
     [Required]

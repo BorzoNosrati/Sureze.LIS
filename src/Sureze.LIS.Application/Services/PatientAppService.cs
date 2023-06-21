@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper.Internal.Mappers;
 using Sureze.LIS.Application.Contracts.Dtos.Commons;
@@ -6,15 +8,18 @@ using Sureze.LIS.Application.Contracts.Services;
 using Sureze.LIS.Commons;
 using Sureze.LIS.Dtos.Patients;
 using Sureze.LIS.Patients;
+using Sureze.LIS.Permissions;
 using Volo.Abp.Application.Dtos;
 using Volo.Abp.Application.Services;
+using Volo.Abp.Data;
 using Volo.Abp.Domain.Entities;
 using Volo.Abp.Domain.Repositories;
 
 namespace Sureze.LIS.Services;
 
-public class PatientAppService : CrudAppService<Patient, PatientDto, int, PagedAndSortedResultRequestDto, CreatePatientDto, UpdatePatientDto>, IPatientAppService
+public class PatientAppService : CrudAppService<Patient, PatientDto, int, PatientRequestDto, CreatePatientDto, UpdatePatientDto>, IPatientAppService
 {
+    private readonly IDataFilter<IPatientFilter> _dataFilter;
     private readonly IRepository<AlternateIDType, int> _alternateIDTypeRep;
     private readonly IRepository<Citizen, int> _citizenRep;
     private readonly IRepository<EducationLevel, int> _educationLevelRep;
@@ -46,11 +51,13 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, PagedA
         IRepository<Race, int> raceRep,
         IRepository<Religion, int> religionRep,
         IRepository<Gender, int> genderRep,
-        IRepository<NamePrefix, int> namePrefixRep
+        IRepository<NamePrefix, int> namePrefixRep,
+
+
+        IDataFilter<IPatientFilter> dataFilter
         ) : base(repository)
     {
-
-
+        _dataFilter = dataFilter;
 
         _alternateIDTypeRep = alternateIDTypeRep;
         _citizenRep = citizenRep;
@@ -66,6 +73,61 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, PagedA
         _religionRep = religionRep;
         _genderRep = genderRep;
         _namePrefixRep = namePrefixRep;
+
+
+
+
+        GetPolicyName = LISPermissions.Patients.Default;
+        GetListPolicyName = LISPermissions.Patients.Default;
+        CreatePolicyName = LISPermissions.Patients.Create;
+        UpdatePolicyName = LISPermissions.Patients.Edit;
+        DeletePolicyName = LISPermissions.Patients.Delete;
+    }
+
+    public async override Task<PatientDto> GetAsync(int id)
+    {
+        var patient = await base.GetAsync(id);
+        var status = await _inActiveStatusRep.GetAsync(patient.InActiveStatusId);
+        patient.InActiveStatus = status.Title;
+        return patient;
+    }
+    protected async override Task<IQueryable<Patient>> CreateFilteredQueryAsync(PatientRequestDto input)
+    {
+        var q = await base.CreateFilteredQueryAsync(input);
+        return q
+           .WhereIf(!input.Filter.IsNullOrWhiteSpace(), x => 
+           x.NationalIDNumber.Contains(input.Filter)||
+           x.MRN.Contains(input.Filter)||
+           (x.FirstName+" "+x.LastName).Contains(input.Filter))
+
+           .WhereIf(!input.NationalIDNumber.IsNullOrWhiteSpace(), x => x.NationalIDNumber.Contains(input.NationalIDNumber))
+           .WhereIf(!input.MRN.IsNullOrWhiteSpace(), x => x.MRN.Contains(input.MRN))
+           .WhereIf(input.InActiveStatusId.HasValue, x => x.InActiveStatusId==input.InActiveStatusId)
+           .WhereIf(input.DateOfBirth.HasValue, x => x.DateOfBirth == input.DateOfBirth)
+           .WhereIf(!input.Fullname.IsNullOrWhiteSpace(), x => (x.FirstName + " " + x.LastName).Contains(input.Fullname))
+           ;
+    }
+    public async override Task<PagedResultDto<PatientDto>> GetListAsync(PatientRequestDto input)
+    {
+        using (_dataFilter.Enable())
+        {
+            // because I sure that the " _inActiveStatusRep.GetListAsync()" returns less than 10 items
+            var statuses = await _inActiveStatusRep.GetListAsync();
+
+            var patients = await base.GetListAsync(input);
+
+
+            var newPatients = patients.Items.Join(statuses, p => p.InActiveStatusId, s => s.Id, (p, s) =>
+            {
+                p.InActiveStatus = s.Title;
+                return p;
+            });
+            patients.Items = newPatients.ToList();
+            return patients;
+        }
+
+
+
     }
 
     public async Task<ListResultDto<AlternateIDTypeLookupDto>> GetAlternateIDTypeLookupAsync()
@@ -147,9 +209,8 @@ public class PatientAppService : CrudAppService<Patient, PatientDto, int, PagedA
        );
     }
 
-    public async override  Task<PatientDto> CreateAsync(CreatePatientDto input)
+    public async override Task<PatientDto> CreateAsync(CreatePatientDto input)
     {
-       
-      return  await base.CreateAsync(input);
+        return await base.CreateAsync(input);
     }
 }

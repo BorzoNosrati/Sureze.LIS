@@ -7,6 +7,9 @@ namespace Sureze.LIS.Dtos.Patients;
 
 public class PatientDto : AuditedEntityDto<int>
 {
+    public string InActiveStatus { get; set; }
+
+
 
     public string MRN { get; set; }
     public string FirstName { get; set; }

@@ -1,13 +1,201 @@
 ﻿@page "/patients"
+@attribute [Authorize(LISPermissions.Patients.Default)]
+
+@using Sureze.LIS.Blazor.Extensions;
+@using Sureze.LIS.Application.Contracts.Services;
+@using Sureze.LIS.Blazor.HelperComponents
 @using Sureze.LIS.Dtos.Patients;
+@using Sureze.LIS.Commons;
+@using Sureze.LIS.Application.Contracts.Dtos.Commons;
+@using Sureze.LIS.Localization;
+@using Sureze.LIS.Permissions;
+@using Volo.Abp.Application.Dtos;
+@using Volo.Abp.AspNetCore.Components.Web;
+
+@inject NavigationManager navigation
+@inject AbpBlazorMessageLocalizerHelper<LISResource> LH
+@inherits AbpCrudPageBase<IPatientAppService, PatientDto, int, PatientRequestDto, CreatePatientDto,UpdatePatientDto>
 
 @code {
-    List<PatientDto> patients = new();
+    IReadOnlyList<InActiveStatusLookupDto> inActiveStatusList = Array.Empty<InActiveStatusLookupDto>();
 
-    
+    string editPageUrl = "/EditPatient/";
+    bool filterableGrid = false;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        inActiveStatusList = (await AppService.GetInActiveStatusLookupAsync()).Items;
+    }
+    protected async override ValueTask SetTableColumnsAsync()
+    {
+        await base.SetTableColumnsAsync();
+    }
+
+    protected async override Task UpdateGetListInputAsync()
+    {
+        await base.UpdateGetListInputAsync();
+    }
+    protected async override Task SearchEntitiesAsync()
+    {
+        await base.SearchEntitiesAsync();
+    }
+
+    void OnFilteredDataChanged(DataGridFilteredDataEventArgs<PatientDto> e)
+    {
+
+    }
+    protected override Task OnDataGridReadAsync(DataGridReadDataEventArgs<PatientDto> e)
+    {
+        e.Columns.MapFilters(GetListInput, (col) =>
+        {
+            if (col.Field == "FirstName")
+                GetListInput.Fullname = col.SearchValue?.ToString();
+        });
+
+        return base.OnDataGridReadAsync(e);
+    }
+
+    DataGrid<PatientDto> dataGrid;
+    DatePicker<DateOnly?> dobDatePicker;
 }
 
 <h3>Patients</h3>
 
+<Card>
+    <CardHeader>
+        <Row Class="justify-content-between">
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <h2>@L["Patients"]</h2>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsAuto">
+                <Button Color="Color.Primary"
+                        To="/RegisterPatient"
+                        Type="ButtonType.Link">
+                    @L["NewPatient"]
+                </Button>
+            </Column>
+            <Column ColumnSize="ColumnSize.IsFull">
+                <Row>
+                    <Column ColumnSize="ColumnSize.Is6">
+                        <TextEdit Text="@GetListInput.Filter" TextChanged="@(value=>{
+GetListInput.Filter=value;
+return dataGrid.Reload();
+})" />
+                    </Column>
+                    <Column ColumnSize="ColumnSize.Is6">
+                        <Check @bind-Checked="@filterableGrid">Advanced Search</Check>
+                    </Column>
+                </Row>
+            </Column>
+        </Row>
+    </CardHeader>
+    <CardBody>
+        @*<AbpExtensibleDataGrid TItem="PatientDto"
+        Data="Entities"
+        ReadData="OnDataGridReadAsync"
+        TotalItems="TotalCount"
+        ShowPager="true"
+        PageSize="PageSize"
+        CurrentPage="@CurrentPage"
+        Columns="@UserManagementTableColumns">
 
+        </AbpExtensibleDataGrid>*@
+        <DataGrid @ref="dataGrid"
+                  TItem="PatientDto"
+                  Data="Entities"
+                  ReadData="OnDataGridReadAsync"
+                  CurrentPage="CurrentPage"
+                  TotalItems="TotalCount"
+                  ShowPager="true"
+                  PageSize="PageSize"
+                  Filterable="@filterableGrid"
+                  FilterMethod="DataGridFilterMethod.Contains"
+                  FilteredDataChanged="OnFilteredDataChanged">
+            <DataGridColumns>
+
+                <DataGridColumn TItem="PatientDto"
+                                Field="@nameof(PatientDto.FirstName)"
+                                Caption="@L["Person"]"
+                                Filterable="true">
+                    <DisplayTemplate>
+                        @{
+                            var src = context.ProfilePicture?.Length==0 ?
+                            navigation.ToAbsoluteUri("/images/avatar2.png").ToString() :
+                            $"data:image/png;base64,{Convert.ToBase64String(context.ProfilePicture)}";
+                        }
+                        <img class="m-2" src="@src" style="height:50px;max-width:50px" />
+                        <span class="m-2">@context.FirstName @context.LastName</span>
+                    </DisplayTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="PatientDto"
+                                Field="@nameof(PatientDto.MRN)"
+                                Caption="@L["MRN"]">
+                </DataGridColumn>
+
+                <DataGridColumn TItem="PatientDto"
+                                Field="@nameof(PatientDto.InActiveStatus)"
+                                Caption="@L["Status"]">
+                    <FilterTemplate>
+                        <DropDownList SelectedValue="@GetListInput.InActiveStatusId"
+                                      SelectedValueChanged="@(value=>{
+GetListInput.InActiveStatusId=value;
+context.TriggerFilterChange(GetListInput.InActiveStatusId);
+})"
+                                      TItem="InActiveStatusLookupDto"
+                                      TValue="int?"
+                                      Items="inActiveStatusList"
+                                      GetValue="g=>g.Id"
+                                      GetText="g=>g.Title" Nullable="true" />
+                    </FilterTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="PatientDto"
+                                Field="@nameof(PatientDto.DateOfBirth)"
+                                Caption="@L["DOB"]">
+                    <DisplayTemplate>
+                        @if (context.DateOfBirth.HasValue)
+                        {
+                            @DateTime.Parse(context.DateOfBirth.ToString()).ToString("MMM dd, yyyy")
+                        }
+                    </DisplayTemplate>
+                    <FilterTemplate>
+                        <Addons>
+                            <Addon AddonType="AddonType.Body">
+
+                                <DatePicker TValue="DateOnly?" @ref="@dobDatePicker" Date="@GetListInput.DateOfBirth"
+                                            DateChanged="@(value=>{
+GetListInput.DateOfBirth=value;
+context.TriggerFilterChange(GetListInput.DateOfBirth);
+})" />
+                            </Addon>
+                            <Addon AddonType="AddonType.End">
+                                <Button Color="Color.Light" Clicked="@(()=>dobDatePicker.ToggleAsync())">
+                                    <Icon Name="IconName.CalendarDay" />
+                                </Button>
+                            </Addon>
+                        </Addons>
+                    </FilterTemplate>
+                </DataGridColumn>
+                <DataGridColumn TItem="PatientDto"
+                                Field="@nameof(PatientDto.NationalIDNumber)"
+                                Caption="@L["NationalIDNumber"]">
+                </DataGridColumn>
+                <DataGridEntityActionsColumn TItem="PatientDto" @ref="@EntityActionsColumn">
+                    <DisplayTemplate>
+                        <EntityActions TItem="PatientDto" EntityActionsColumn="@EntityActionsColumn">
+                            <EntityAction TItem="PatientDto"
+                                          Text="@L["Edit"]"
+                                          Clicked="(p) => navigation.NavigateTo(editPageUrl+context.Id)" />
+                            <EntityAction TItem="PatientDto"
+                                          Text="@L["Delete"]"
+                                          Clicked="() => DeleteEntityAsync(context)"
+                                          ConfirmationMessage="()=>GetDeleteConfirmationMessage(context)" />
+
+                        </EntityActions>
+                    </DisplayTemplate>
+                </DataGridEntityActionsColumn>
+            </DataGridColumns>
+        </DataGrid>
+    </CardBody>
+</Card>
 

@@ -8,7 +8,7 @@ namespace Sureze.LIS.Application.Contracts.Services;
 public interface IPatientAppService : ICrudAppService<
     PatientDto,
     int,
-    PagedAndSortedResultRequestDto,
+    PatientRequestDto,
     CreatePatientDto,
     UpdatePatientDto>
 {
