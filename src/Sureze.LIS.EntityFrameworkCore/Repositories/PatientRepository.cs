@@ -23,18 +23,18 @@ public class PatientRepository : EfCoreRepository<LISDbContext, Patient, int>, I
         return dbset
             .WhereIf(!input.Filter.IsNullOrWhiteSpace(),
                 x =>
-                    EF.Functions.Like(x.NationalIDNumber, $"%{input.Filter}%") ||
-                    EF.Functions.Like(x.MRN, $"%{input.Filter}%") ||
-                    EF.Functions.Like(x.FirstName + " " + x.LastName, $"%{input.Filter}%"))
+                    EF.Functions.ILike(x.NationalIDNumber, $"%{input.Filter}%") ||
+                    EF.Functions.ILike(x.MRN, $"%{input.Filter}%") ||
+                    EF.Functions.ILike(x.FirstName + " " + x.LastName, $"%{input.Filter}%"))
 
             .WhereIf(!input.NationalIDNumber.IsNullOrWhiteSpace(), x =>
-            EF.Functions.Like(x.NationalIDNumber, $"%{input.NationalIDNumber}%"))
+            EF.Functions.ILike(x.NationalIDNumber, $"%{input.NationalIDNumber}%"))
 
             .WhereIf(!input.MRN.IsNullOrWhiteSpace(), x =>
-            EF.Functions.Like(x.NationalIDNumber, $"%{input.MRN}%"))
+            EF.Functions.ILike(x.NationalIDNumber, $"%{input.MRN}%"))
 
             .WhereIf(!input.Fullname.IsNullOrWhiteSpace(), x =>
-            EF.Functions.Like(x.FirstName + " " + x.LastName, $"%{input.Fullname}%"))
+            EF.Functions.ILike(x.FirstName + " " + x.LastName, $"%{input.Fullname}%"))
 
              .WhereIf(input.InActiveStatusId.HasValue, x => x.InActiveStatusId == input.InActiveStatusId)
             .WhereIf(input.DateOfBirth.HasValue, x => x.DateOfBirth == input.DateOfBirth)
